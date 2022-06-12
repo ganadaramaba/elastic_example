@@ -3,6 +3,9 @@ const express = require("express");
 const router = express.Router();
 const es = require("es7");
 const INDEX = "fortest"; // index는 대문자 안됨
+const config = {
+    node: "http://localhost:9200/" // http:// 이거 빼니까 에러남
+};
 
 // 모두 가져오기
 router.get("", async (req, res) => {
@@ -11,9 +14,7 @@ router.get("", async (req, res) => {
         esResult: null
     }
 
-    const client = new es.Client({
-        node: "http://localhost:9200/"
-    });
+    const client = new es.Client(config);
 
     try {
         const temp = await client.search({
@@ -43,9 +44,7 @@ router.get("/status", async (req, res) => {
         esResult: null
     }
 
-    const client = new es.Client({
-        node: "http://localhost:9200" // http:// 이거 빼니까 에러남
-    });
+    const client = new es.Client(config);
 
     try {
         result.esResult = await client.ping();
@@ -72,9 +71,7 @@ router.post("", async (req, res) => {
         esResult: null
     }
 
-    const client = new es.Client({
-        node: "http://localhost:9200"
-    });
+    const client = new es.Client(config);
 
     console.log("\nusing async/await\n");
     try {
@@ -97,6 +94,7 @@ router.post("", async (req, res) => {
     res.send(result);
 })
 
+// 특정 조건으로 삭제
 router.delete("", async (req, res) => {
     const receive = {
         num: req.body.num
@@ -106,9 +104,7 @@ router.delete("", async (req, res) => {
         esResult: null
     }
 
-    const client = new es.Client({
-        node: "http://localhost:9200"
-    });
+    const client = new es.Client(config);
 
     // async/await 방식
     console.log("\nusing async/await\n");
